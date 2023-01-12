@@ -20,19 +20,3 @@ export const AppDataSource = new DataSource({
   migrations: [],
   subscribers: [],
 });
-
-export const TestAppDataSource = new DataSource({
-  type: "postgres",
-  host: env.PG_HOST,
-  port: env.PG_PORT,
-  username: env.PG_USERNAME,
-  password: env.PG_PASSWORD,
-  database: env.PG_TEST_DATABASE,
-  synchronize: true,
-  logging: false,
-  entities: [Bookcase, Collection, Medium, Shelf, Type],
-  migrations: [],
-  subscribers: [],
-  dropSchema: true,
-});
-  

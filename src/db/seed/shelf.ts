@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { AppDataSource } from "../../config/data-source";
+import { DataSource } from "typeorm";
 import { Bookcase } from "../../entity/Bookcase";
 import { Collection } from "../../entity/Collection";
 import { Shelf } from "../../entity/Shelf";
@@ -21,10 +21,13 @@ function createRandomShelf(
   });
 }
 
-export async function seedShelfTable(totalSeeds: number) {
-  const bookcaseRepository = AppDataSource.getRepository(Bookcase);
-  const collectionRepository = AppDataSource.getRepository(Collection);
-  const shelfRepository = AppDataSource.getRepository(Shelf);
+export async function seedShelfTable(
+  dataSource: DataSource,
+  totalSeeds: number
+) {
+  const bookcaseRepository = dataSource.getRepository(Bookcase);
+  const collectionRepository = dataSource.getRepository(Collection);
+  const shelfRepository = dataSource.getRepository(Shelf);
 
   const bookcaseCount = await bookcaseRepository.count();
   const collectionCount = await collectionRepository.count();

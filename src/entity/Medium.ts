@@ -1,10 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Collection } from "./Collection";
 import { Shelf } from "./Shelf";
@@ -35,4 +36,10 @@ export class Medium {
   @ManyToOne(() => Collection, (collection) => collection.media)
   @JoinColumn({ name: "collection_id" })
   collection: Collection;
+
+  @CreateDateColumn()
+  public created_at: Date;
+
+  @UpdateDateColumn()
+  public updated_at: Date;
 }

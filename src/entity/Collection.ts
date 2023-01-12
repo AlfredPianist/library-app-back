@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { Medium } from "./Medium";
 import { Shelf } from "./Shelf";
 
@@ -18,4 +25,10 @@ export class Collection {
 
   @OneToMany(() => Shelf, (shelf) => shelf.collection)
   shelves?: Shelf[];
+
+  @CreateDateColumn()
+  public created_at: Date;
+
+  @UpdateDateColumn()
+  public updated_at: Date;
 }

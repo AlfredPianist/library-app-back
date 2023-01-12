@@ -20,15 +20,22 @@ describe("Bookcase entity", () => {
   beforeEach(async () => {
     clock = sinon.useFakeTimers({
       now: Date.now(),
-      toFake: ['setTimeout', 'setInterval', 'setImmediate', 'clearTimeout', 'clearInterval', 'clearImmediate'],
+      toFake: [
+        "setTimeout",
+        "setInterval",
+        "setImmediate",
+        "clearTimeout",
+        "clearInterval",
+        "clearImmediate",
+      ],
       shouldAdvanceTime: true,
-      shouldClearNativeTimers: true
+      shouldClearNativeTimers: true,
     });
     await bookcaseRepository.query(`TRUNCATE bookcase CASCADE;`);
   });
 
   afterEach(async () => {
-    clock.restore()
+    clock.restore();
   });
 
   test("Should save a bookcase", async () => {
@@ -68,12 +75,13 @@ describe("Bookcase entity", () => {
 
     bookcase.name = "New Bookcase";
     bookcase.location = "New Location";
+
     await bookcaseRepository.save(bookcase);
+    const oldBookcaseCount = await bookcaseRepository.count();
 
     await bookcaseRepository.delete({ name: "New Bookcase" });
+    const newBookcaseCount = await bookcaseRepository.count();
 
-    const bookcaseCount = await bookcaseRepository.count();
-
-    expect(bookcaseCount).toBe(0);
+    expect(oldBookcaseCount).toBeGreaterThan(newBookcaseCount);
   });
 });

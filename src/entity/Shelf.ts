@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from "typeorm";
 import { Bookcase } from "./Bookcase";
 import { Collection } from "./Collection";
@@ -28,4 +30,10 @@ export class Shelf {
   @ManyToOne(() => Collection, (collection) => collection.shelves)
   @JoinColumn({ name: "collection_id" })
   collection: Collection;
+
+  @CreateDateColumn()
+  public created_at: Date;
+
+  @UpdateDateColumn()
+  public updated_at: Date;
 }

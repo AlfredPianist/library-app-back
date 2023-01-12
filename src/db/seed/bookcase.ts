@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { AppDataSource } from "../../config/data-source";
+import { DataSource } from "typeorm";
 import { Bookcase } from "../../entity/Bookcase";
 
 function createRandomBookcase(): Bookcase {
@@ -10,8 +10,11 @@ function createRandomBookcase(): Bookcase {
   return bookcase;
 }
 
-export async function seedBookcaseTable(totalSeeds: number) {
-  const bookcaseRepository = AppDataSource.getRepository(Bookcase);
+export async function seedBookcaseTable(
+  dataSource: DataSource,
+  totalSeeds: number
+) {
+  const bookcaseRepository = dataSource.getRepository(Bookcase);
   for (let count = 0; count < totalSeeds; count++) {
     const newBookcase = createRandomBookcase();
     await bookcaseRepository.save(newBookcase);

@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { AppDataSource } from "../../config/data-source";
+import { DataSource } from "typeorm";
 import { Collection } from "../../entity/Collection";
 import { Medium } from "../../entity/Medium";
 import { Shelf } from "../../entity/Shelf";
@@ -29,17 +29,24 @@ function createRandomMedium(
   });
 }
 
-export async function seedMediumTable(totalSeeds: number) {
-  const typeRepository = AppDataSource.getRepository(Type);
-  const shelfRepository = AppDataSource.getRepository(Shelf);
-  const collectionRepository = AppDataSource.getRepository(Collection);
-  const mediumRepository = AppDataSource.getRepository(Medium);
+export async function seedMediumTable(
+  dataSource: DataSource,
+  totalSeeds: number
+) {
+  const typeRepository = dataSource.getRepository(Type);
+  const shelfRepository = dataSource.getRepository(Shelf);
+  const collectionRepository = dataSource.getRepository(Collection);
+  const mediumRepository = dataSource.getRepository(Medium);
 
   const typeCount = await typeRepository.count();
   const shelfCount = await shelfRepository.count();
   const collectionCount = await collectionRepository.count();
   for (let count = 0; count < totalSeeds; count++) {
-    const newMedium = createRandomMedium(typeCount, shelfCount, collectionCount);
+    const newMedium = createRandomMedium(
+      typeCount,
+      shelfCount,
+      collectionCount
+    );
     mediumRepository.save(newMedium);
   }
 

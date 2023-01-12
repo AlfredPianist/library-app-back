@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { AppDataSource } from "../../config/data-source";
+import { DataSource } from "typeorm";
 import { Collection } from "../../entity/Collection";
 
 function createRandomCollection(): Collection {
@@ -9,11 +9,14 @@ function createRandomCollection(): Collection {
   });
 }
 
-export function seedCollectionTable(totalSeeds: number) {
-  const collectionRepository = AppDataSource.getRepository(Collection);
+export async function seedCollectionTable(
+  dataSource: DataSource,
+  totalSeeds: number
+) {
+  const collectionRepository = dataSource.getRepository(Collection);
   for (let count = 0; count < totalSeeds; count++) {
     const newCollection = createRandomCollection();
-    collectionRepository.save(newCollection);
+    await collectionRepository.save(newCollection);
   }
 
   console.log(`Seeded ${totalSeeds} collections.`);
