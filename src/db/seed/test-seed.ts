@@ -1,4 +1,4 @@
-import { AppDataSource } from "../../config/data-source";
+import { AppDataSource } from "../../config/test-data-source";
 import { seedBookcaseTable } from "./bookcase";
 import { seedCollectionTable } from "./collection";
 import { seedMediumTable } from "./medium";

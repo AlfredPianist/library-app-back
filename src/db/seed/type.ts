@@ -1,8 +1,8 @@
-import { AppDataSource } from "../../config/data-source";
+import { DataSource } from "typeorm";
 import { Type } from "../../entity/Type";
 
-export function seedTypeTable() {
-  const typeRepository = AppDataSource.getRepository(Type);
+export async function seedTypeTable(dataSource: DataSource) {
+  const typeRepository = dataSource.getRepository(Type);
   const typesArray = [
     "Book",
     "Magazine",
@@ -13,13 +13,16 @@ export function seedTypeTable() {
     "Photo",
   ];
 
-  typesArray.forEach(async (type) => {
-    const existingType = await typeRepository.findOneBy({ name: type });
-    if (!existingType) {
-      const newType = Object.assign(new Type(), { name: type });
-      typeRepository.save(newType);
-    }
-  });
+  await Promise.all(
+    typesArray.map(async (type) => {
+      const existingType = await typeRepository.findOneBy({ name: type });
+      if (!existingType) {
+        const newType = Object.assign(new Type(), { name: type });
+        return typeRepository.save(newType);
+      }
+      return Promise.resolve();
+    })
+  );
 
   console.log("Seeded 7 types.");
 }
