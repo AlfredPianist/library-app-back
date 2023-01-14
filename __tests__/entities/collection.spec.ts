@@ -31,7 +31,7 @@ describe("Collection entity", () => {
       shouldAdvanceTime: true,
       shouldClearNativeTimers: true,
     });
-    await collectionRepository.query(`TRUNCATE collection CASCADE;`);
+    await collectionRepository.query(`DELETE FROM collection CASCADE;`);
   });
 
   afterEach(async () => {

@@ -19,8 +19,6 @@ describe("Shelf entity", () => {
     shelfRepository = connection.getRepository(Shelf);
     collectionRepository = connection.getRepository(Collection);
     bookcaseRepository = connection.getRepository(Bookcase);
-    await seedBookcaseTable(TestAppDataSource, 2);
-    await seedCollectionTable(TestAppDataSource, 5);
   });
 
   afterAll(async () => {
@@ -37,13 +35,16 @@ describe("Shelf entity", () => {
         "clearTimeout",
         "clearInterval",
         "clearImmediate",
+        'Date'
       ],
       shouldAdvanceTime: true,
       shouldClearNativeTimers: true,
     });
-    await shelfRepository.query(`TRUNCATE shelf CASCADE;`);
-    await collectionRepository.query(`TRUNCATE collection CASCADE;`);
-    await bookcaseRepository.query(`TRUNCATE bookcase CASCADE;`);
+    await shelfRepository.query(`DELETE FROM shelf CASCADE;`);
+    await bookcaseRepository.query(`DELETE FROM bookcase CASCADE;`);
+    await collectionRepository.query(`DELETE FROM collection CASCADE;`);
+    await seedBookcaseTable(TestAppDataSource, 2);
+    await seedCollectionTable(TestAppDataSource, 3);
   });
 
   afterEach(async () => {
@@ -51,16 +52,18 @@ describe("Shelf entity", () => {
   });
 
   test("Should save a shelf", async () => {
-    const collection = await collectionRepository
+    let collection = await collectionRepository
       .createQueryBuilder()
-      .select("*")
+      .select("id")
       .orderBy("random()")
-      .getRawOne<Collection>();
-    const bookcase = await bookcaseRepository
+      .getRawOne<Collection | null>();
+    let bookcase = await bookcaseRepository
       .createQueryBuilder()
-      .select("*")
+      .select("id")
       .orderBy("random()")
-      .getRawOne<Bookcase>();
+      .getRawOne<Bookcase | null>();
+    collection = await collectionRepository.findOneBy({ id: collection!.id });
+    bookcase = await bookcaseRepository.findOneBy({ id: bookcase!.id });
 
     const shelf = new Shelf();
     shelf.position = "New Position";
@@ -69,27 +72,44 @@ describe("Shelf entity", () => {
 
     await shelfRepository.save(shelf);
 
-    const savedShelf = await shelfRepository.findOneBy({
-      position: "New Position",
+    const savedShelf = await shelfRepository.findOne({
+      where: {
+        position: "New Position",
+      },
+      relations: ["bookcase", "collection"],
     });
 
     expect(savedShelf).toBeDefined();
     expect(savedShelf!.position).toBe("New Position");
-    expect(savedShelf!.bookcase).toBe(bookcase);
-    expect(savedShelf!.collection).toBe(collection);
+    expect(savedShelf!.bookcase).toStrictEqual(bookcase);
+    expect(savedShelf!.collection).toStrictEqual(collection);
+
+    const updatedBookcase = await bookcaseRepository.findOne({
+      where: { id: bookcase!.id },
+      relations: ["shelves"],
+    });
+    expect(savedShelf!).toMatchObject(updatedBookcase!.shelves![0]);
+
+    const updatedCollection = await collectionRepository.findOne({
+      where: { id: collection!.id },
+      relations: ["shelves"],
+    });
+    expect(savedShelf!).toMatchObject(updatedCollection!.shelves![0]);
   });
 
   test("Should update a shelf", async () => {
-    const collection = await collectionRepository
+    let collection = await collectionRepository
       .createQueryBuilder()
-      .select("*")
+      .select("id")
       .orderBy("random()")
-      .getRawOne<Collection>();
-    const bookcase = await bookcaseRepository
+      .getRawOne<Collection | null>();
+    let bookcase = await bookcaseRepository
       .createQueryBuilder()
-      .select("*")
+      .select("id")
       .orderBy("random()")
-      .getRawOne<Bookcase>();
+      .getRawOne<Bookcase | null>();
+    collection = await collectionRepository.findOneBy({ id: collection!.id });
+    bookcase = await bookcaseRepository.findOneBy({ id: bookcase!.id });
 
     const shelf = new Shelf();
     shelf.position = "New Position";
@@ -105,6 +125,9 @@ describe("Shelf entity", () => {
     await shelfRepository.save(shelf);
 
     const updatedAt = shelf.updated_at;
+
+    console.log(createdAt);
+    console.log(updatedAt);
 
     expect(createdAt).not.toEqual(updatedAt);
   });

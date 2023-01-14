@@ -17,7 +17,7 @@ describe("Type entity", () => {
   });
 
   afterEach(async () => {
-    await typeRepository.query(`TRUNCATE type CASCADE;`);
+    await typeRepository.query(`DELETE FROM type CASCADE;`);
   });
 
   test("Should save a type", async () => {

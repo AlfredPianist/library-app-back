@@ -17,5 +17,5 @@ export const environmentVariables = {
   PG_USERNAME: process.env.PG_USERNAME || "",
   PG_PASSWORD: process.env.PG_PASSWORD || "",
   PG_DATABASE: process.env.PG_DATABASE || "library-app",
-  PG_TEST_DATABASE: process.env.PG_TEST_DATABASE || "library-app-test",
+  TEST_DATABASE: process.env.TEST_DATABASE || "library-app-test",
 } as const;

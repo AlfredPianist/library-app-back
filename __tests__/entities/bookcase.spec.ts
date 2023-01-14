@@ -31,7 +31,7 @@ describe("Bookcase entity", () => {
       shouldAdvanceTime: true,
       shouldClearNativeTimers: true,
     });
-    await bookcaseRepository.query(`TRUNCATE bookcase CASCADE;`);
+    await bookcaseRepository.query(`DELETE FROM bookcase CASCADE;`);
   });
 
   afterEach(async () => {

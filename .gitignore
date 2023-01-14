@@ -10,3 +10,6 @@ dist/
 
 # Ignore .env file
 .env
+
+# Ignore test databases
+*.sqlite
