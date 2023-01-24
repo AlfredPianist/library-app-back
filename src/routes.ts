@@ -1,23 +1,35 @@
-import { UserController } from "./controller/UserController"
+import { MediumController } from "./controller/MediumController";
+import { UserController } from "./controller/UserController";
 
-export const Routes = [{
+export const Routes = [
+  {
+    controller: UserController,
     method: "get",
+    action: "all",
     route: "/users",
+  },
+  {
     controller: UserController,
-    action: "all"
-}, {
     method: "get",
+    action: "one",
     route: "/users/:id",
+  },
+  {
     controller: UserController,
-    action: "one"
-}, {
     method: "post",
+    action: "save",
     route: "/users",
+  },
+  {
     controller: UserController,
-    action: "save"
-}, {
     method: "delete",
+    action: "remove",
     route: "/users/:id",
-    controller: UserController,
-    action: "remove"
-}]
+  },
+  {
+    controller: MediumController,
+    method: "get",
+    action: "all",
+    route: "/media",
+  },
+];

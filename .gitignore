@@ -1,6 +1,15 @@
+# Ignore IDEs
 .idea/
 .vscode/
+
+# Ignore node_modules folder
 node_modules/
-build/
-tmp/
-temp/
+
+# Ignore dist folder after compiling
+dist/
+
+# Ignore .env file
+.env
+
+# Ignore test databases
+*.sqlite
