@@ -17,6 +17,7 @@
     "sqlite3": "^5.1.4",
     "ts-jest": "^29.0.3",
     "ts-node": "10.7.0",
+    "typeorm-extension": "^2.4.2",
     "typescript": "^4.5.2"
   },
   "dependencies": {
@@ -28,8 +29,8 @@
     "typeorm": "0.3.11"
   },
   "scripts": {
-    "db:create": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js db:create",
-    "db:drop": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js db:drop",
+    "db:create": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js db:create -d ./config/data-source.ts",
+    "db:drop": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js db:drop -d ./config/data-source.ts",
     "db:seed": "ts-node src/db/seed/seed.ts",
     "dev": "nodemon --legacy-watch './**/*.ts' --exec 'ts-node' src/index.ts",
     "prod:build": "tsc",

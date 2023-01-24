@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
@@ -25,6 +26,12 @@ export class Medium {
   @Column()
   author: string;
 
+  @Column({ nullable: true })
+  synopsis: string;
+
+  @Column({ nullable: true })
+  image_path: string;
+
   @ManyToOne(() => Type, (type) => type.media)
   @JoinColumn({ name: "type_id" })
   type: Type;
@@ -36,6 +43,14 @@ export class Medium {
   @ManyToOne(() => Collection, (collection) => collection.media)
   @JoinColumn({ name: "collection_id" })
   collection: Collection;
+
+  @OneToMany(() => Medium, (medium) => medium.physicalMedium)
+  @JoinColumn()
+  digitalMedia: Medium[];
+
+  @ManyToOne(() => Medium, (medium) => medium.digitalMedia)
+  @JoinColumn({ name: "physical_medium_id" })
+  physicalMedium: Medium;
 
   @CreateDateColumn()
   public created_at: Date;
